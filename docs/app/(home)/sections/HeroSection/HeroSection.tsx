@@ -1,5 +1,6 @@
 "use client";
 
+import { captureCreateCliCommandCopied } from "@/lib/create-cli-copy-analytics";
 import { ArrowRight } from "lucide-react";
 import { PLATFORMS } from "../../components/PlatformLogos";
 import { useTheme } from "next-themes";
@@ -10,6 +11,14 @@ import {
   GitHubButton,
 } from "../../components/GitHubButton/GitHubButton";
 import styles from "./HeroSection.module.css";
+
+function capturePrimaryHeroCliCopy(command: string) {
+  captureCreateCliCommandCopied(command, { source: "homepage_hero", interaction: "primary" });
+}
+
+function captureDropdownHeroCliCopy(command: string) {
+  captureCreateCliCommandCopied(command, { source: "homepage_hero", interaction: "dropdown" });
+}
 
 export const heroStyles = styles;
 
@@ -93,6 +102,7 @@ export function NpmButton({ className = "", command }: { className?: string; com
     <div className={styles.npmButtonWrapper}>
       <ClipboardCommandButton
         command={command}
+        onCopySuccess={capturePrimaryHeroCliCopy}
         className={`${styles.npmButton} ${className}`.trim()}
         iconContainerClassName={styles.npmIconBadge}
         copyIconColor="currentColor"
@@ -143,6 +153,7 @@ function CommandDropdownButton({
     >
       <ClipboardCommandButton
         command={command}
+        onCopySuccess={capturePrimaryHeroCliCopy}
         className={styles.commandTrigger}
         iconContainerClassName={styles.commandTriggerBadge}
         copyIconColor="currentColor"
@@ -163,6 +174,7 @@ function CommandDropdownButton({
             <ClipboardCommandButton
               key={variant.id}
               command={variant.command}
+              onCopySuccess={captureDropdownHeroCliCopy}
               className={styles.commandMenuItem}
               iconContainerClassName={styles.commandMenuItemIcon}
               copyIconColor="currentColor"
